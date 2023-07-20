@@ -18,7 +18,7 @@ class Product extends Model
 
     protected $fillable = [
         'name',
-        'decription',
+        'description',
         'quantity',
         'is_available',
         'image',
@@ -43,7 +43,7 @@ class Product extends Model
 
     public function transactions(): HasMany
     {
-        return $this->hasMany(Transaction::class, 'id', 'product_id');
+        return $this->hasMany(Transaction::class, 'product_id');
     }
 
     public function created_by_user(): BelongsTo

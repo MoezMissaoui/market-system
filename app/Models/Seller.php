@@ -11,7 +11,7 @@ class Seller extends User
 
     public function products(): HasMany
     {
-        return $this->hasMany(Product::class, 'id', 'seller_id');
+        return $this->hasMany(Product::class, 'seller_id');
     }
 
 }
