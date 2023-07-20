@@ -13,23 +13,22 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            
+            $table->integer('quantity');
+            
+            $table->unsignedBigInteger('buyer_id');
+            $table->foreign('buyer_id')
+                    ->references('id')
+                    ->on('users')
+                    ->onDelete('Cascade');
 
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->integer('age')->nullable();
-
-            $table->string('mobile')->nullable();
-            $table->text('adress')->nullable();
-
-
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-
-            $table->boolean('is_admin')->default(false);
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')
+                    ->references('id')
+                    ->on('products')
+                    ->onDelete('Cascade');
 
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
@@ -46,6 +45,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('transactions');
     }
 };
