@@ -13,8 +13,6 @@ use Illuminate\Http\Request;
 
 class UserController extends ApiController
 {
-
-
     /**
      * Display a listing of the resource.
      *
@@ -71,9 +69,7 @@ class UserController extends ApiController
     {
         $users = User::all();
 
-        return response()->json([
-            'data' => $users
-        ], 200);
+        return $this->showAll($users);
     }
 
     /**
@@ -96,10 +92,8 @@ class UserController extends ApiController
 
         if ($validator->fails()) {
             $code = Response::HTTP_UNPROCESSABLE_ENTITY;
-            $data = $validator->errors()->messages();
-            return response()->json([
-                'data' => $data
-            ], $code);
+            $messages = $validator->errors()->messages();
+            return $this->errorResponse($messages, $code);
         }
 
 
@@ -111,9 +105,7 @@ class UserController extends ApiController
 
         $user = User::create($data);
 
-        return response()->json([
-            'data' => $user
-        ], 201);
+        return $this->showOne($user, Response::HTTP_CREATED);
     }
 
     /**
@@ -126,10 +118,7 @@ class UserController extends ApiController
     public function show($id)
     {
         $user = User::findOrFail($id);
-
-        return response()->json([
-            'data' => $user
-        ], 200);
+        return $this->showOne($user);
     }
 
     /**
@@ -142,7 +131,6 @@ class UserController extends ApiController
 
     public function update(Request $request, $id)
     {
-
         $rules = [
             'first_name'    => 'string',
             'last_name'     => 'string',
@@ -153,10 +141,8 @@ class UserController extends ApiController
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             $code = Response::HTTP_UNPROCESSABLE_ENTITY;
-            $data = $validator->errors()->messages();
-            return response()->json([
-                'data' => $data
-            ], $code);
+            $messages = $validator->errors()->messages();
+            return $this->errorResponse($messages, $code);
         }
         $inputs = $validator->validated();
 
@@ -166,18 +152,15 @@ class UserController extends ApiController
         }
         if ($request->has('is_admin')) {
             if (!$user->has_verified_email()) {
-                return response()->json([
-                    'error' => "Only verified users can modify the admin field",
-                    'code'  => 409,
-                ], 409);
+                $code = Response::HTTP_UNPROCESSABLE_ENTITY;
+                $messages = "Only verified users can modify the admin field";
+                return $this->errorResponse($messages, $code);
             }
             $inputs['is_admin'] = (bool)$request->is_admin;
         }
         $user->update($inputs);
 
-        return response()->json([
-            'data' => $user
-        ], 200); 
+        return $this->showOne($user); 
     }
 
     /**
@@ -188,13 +171,8 @@ class UserController extends ApiController
      */
     public function destroy($id)
     {
-        
         $user = User::findOrFail($id);
-
         $user->delete();
-
-        return response()->json([
-            'data' => null
-        ], 200); 
+        return $this->showOne($user); 
     }
 }

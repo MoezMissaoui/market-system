@@ -26,9 +26,7 @@ class BuyerController extends ApiController
                     ->with('transactions')
                     ->get();
 
-        return response()->json([
-            'data' => $buyers
-        ], 200);
+        return $this->showAll($buyers);
     }
 
     /**
@@ -44,8 +42,6 @@ class BuyerController extends ApiController
                     ->with('transactions')
                     ->findOrFail($id);
 
-        return response()->json([
-            'data' => $buyer
-        ], 200);
+        return $this->showOne($buyer);
     }
 }
