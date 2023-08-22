@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\API\V1\Buyer;
+namespace App\Http\Controllers\API\V1\Seller;
 
-use App\Models\Buyer;
+use App\Models\Seller;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Crypt;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 
-class BuyerController extends Controller
+class SellerController extends Controller
 {
 
     /**
@@ -22,12 +22,12 @@ class BuyerController extends Controller
 
     public function index()
     {
-        $buyers = Buyer::has('transactions')
-                    ->with('transactions')
-                    ->get();
+        $sellers = Seller::has('products')
+                        ->with('products')
+                        ->get();
 
         return response()->json([
-            'data' => $buyers
+            'data' => $sellers
         ], 200);
     }
 
@@ -40,12 +40,12 @@ class BuyerController extends Controller
 
     public function show($id)
     {
-        $buyer = Buyer::has('transactions')
-                    ->with('transactions')
-                    ->findOrFail($id);
+        $seller = Seller::has('products')
+                        ->with('products')
+                        ->findOrFail($id);
 
         return response()->json([
-            'data' => $buyer
+            'data' => $seller
         ], 200);
     }
 }
