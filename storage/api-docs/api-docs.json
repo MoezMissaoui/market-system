@@ -26,7 +26,7 @@
                 ],
                 "summary": "Get users",
                 "description": "Get users",
-                "operationId": "ba501f3269ce6ad8559307f98fe3c862",
+                "operationId": "ddc58337f65c665aa2ae4c627361d691",
                 "parameters": [
                     {
                         "name": "per_page",
@@ -60,12 +60,7 @@
                     "403": {
                         "description": "Forbidden"
                     }
-                },
-                "security": [
-                    {
-                        "bearer": []
-                    }
-                ]
+                }
             }
         }
     },
