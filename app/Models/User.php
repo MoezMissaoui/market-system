@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -56,6 +57,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
 
     public function created_by_user(): BelongsTo
     {
@@ -66,11 +68,38 @@ class User extends Authenticatable
         return $this->belongsTo(User::class, 'updated_by', 'id');
     }
 
-
-
     public function has_verified_email()
     {
         return $this->email_verified_at != NULL;
+    }
+
+    /**
+     * Accessors and mutators
+     * 
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function firstName(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => ucfirst($value),
+            set: fn ($value) => strtolower($value),
+        );
+    }
+
+    protected function lastName(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => ucfirst($value),
+            set: fn ($value) => strtolower($value),
+        );
+    }
+
+    protected function Email(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => ucfirst($value),
+            set: fn ($value) => strtolower($value),
+        );
     }
     
 }
