@@ -8,6 +8,10 @@ use App\Http\Controllers\API\V1\Category\CategoryBuyerController;
 use App\Http\Controllers\API\V1\Category\CategoryProductController;
 use App\Http\Controllers\API\V1\Category\CategorySellerController;
 use App\Http\Controllers\API\V1\Category\CategoryTransactionController;
+use App\Http\Controllers\API\V1\Seller\SellerBuyerController;
+use App\Http\Controllers\API\V1\Seller\SellerCategoryController;
+use App\Http\Controllers\API\V1\Seller\SellerProductController;
+use App\Http\Controllers\API\V1\Seller\SellerTransactionController;
 use App\Http\Controllers\API\V1\Transaction\TransactionCategoryController;
 use App\Http\Controllers\API\V1\Transaction\TransactionSellerController;
 use App\Http\Controllers\API\V1\Category\CategoryController;
@@ -48,6 +52,12 @@ Route::get('buyers/{buyer}/categories', BuyerCategoryController::class);
 
 Route::apiResource('sellers', SellerController::class)
         ->only(['index', 'show']);
+Route::get('sellers/{seller}/transactions', SellerTransactionController::class);
+Route::get('sellers/{seller}/categories', SellerCategoryController::class);
+Route::get('sellers/{seller}/buyers', SellerBuyerController::class);
+Route::apiResource('sellers.buyers', SellerProductController::class)
+        ->only(['index', 'store', 'update']);
+
 
 Route::apiResource('products', ProductController::class)
         ->only(['index', 'show']);
