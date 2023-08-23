@@ -5,12 +5,6 @@ namespace App\Http\Controllers\API\V1\Buyer;
 use App\Http\Controllers\API\ApiController;
 use App\Models\Buyer;
 
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Response;
-use Illuminate\Http\Request;
-
 class BuyerController extends ApiController
 {
 
@@ -22,8 +16,7 @@ class BuyerController extends ApiController
 
     public function index()
     {
-        $buyers = Buyer::has('transactions')
-                    ->with('transactions')
+        $buyers = Buyer::with('transactions')
                     ->get();
 
         return $this->showAll($buyers);
@@ -32,16 +25,12 @@ class BuyerController extends ApiController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  Buyer $buyer
      * @return \Illuminate\Http\Response
      */
 
-    public function show($id)
+    public function show(Buyer $buyer)
     {
-        $buyer = Buyer::has('transactions')
-                    ->with('transactions')
-                    ->findOrFail($id);
-
         return $this->showOne($buyer);
     }
 }
