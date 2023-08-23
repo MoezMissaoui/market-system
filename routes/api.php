@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\V1\Category\CategoryController;
 use App\Http\Controllers\API\V1\Seller\SellerController;
 use App\Http\Controllers\API\V1\Buyer\BuyerController;
 use App\Http\Controllers\API\V1\User\UserController;
@@ -18,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::apiResource('users', UserController::class);
+
+Route::apiResource('categories', CategoryController::class);
 
 Route::apiResource('buyers', BuyerController::class)
         ->only(['index', 'show']);

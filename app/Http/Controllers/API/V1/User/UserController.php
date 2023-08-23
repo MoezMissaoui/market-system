@@ -6,7 +6,6 @@ use App\Http\Controllers\API\ApiController;
 use App\Models\User;
 
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
