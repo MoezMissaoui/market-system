@@ -90,7 +90,7 @@ class UserController extends ApiController
         $this->validate($request, $rules);
 
         $data                         = $request->all();
-        $data['password']             = Crypt::encryptString($request->password);
+        $data['password']             = $request->password;
         $data['email_verified_at']    = now();
         $data['created_by']           = Auth::id();
         $data['is_admin']             = False;
@@ -141,7 +141,7 @@ class UserController extends ApiController
 
         $user = User::findOrFail($id);
         if ($request->has('password')) {
-            $inputs['password'] = Crypt::encryptString($request->password);
+            $inputs['password'] = $request->password;
         }
         if ($request->has('is_admin')) {
             if (!$user->has_verified_email()) {
