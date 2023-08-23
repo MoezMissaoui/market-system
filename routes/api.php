@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\API\V1\Buyer\BuyerCategoryController;
+use App\Http\Controllers\API\V1\Buyer\BuyerProductController;
+use App\Http\Controllers\API\V1\Buyer\BuyerSellerController;
+use App\Http\Controllers\API\V1\Buyer\BuyerTransactionController;
 use App\Http\Controllers\API\V1\Transaction\TransactionCategoryController;
 use App\Http\Controllers\API\V1\Transaction\TransactionSellerController;
 use App\Http\Controllers\API\V1\Category\CategoryController;
@@ -28,6 +32,11 @@ Route::apiResource('categories', CategoryController::class);
 
 Route::apiResource('buyers', BuyerController::class)
         ->only(['index', 'show']);
+Route::get('buyers/{buyer}/transactions', BuyerTransactionController::class);
+Route::get('buyers/{buyer}/sellers', BuyerSellerController::class);
+Route::get('buyers/{buyer}/products', BuyerProductController::class);
+Route::get('buyers/{buyer}/categories', BuyerCategoryController::class);
+
 
 Route::apiResource('sellers', SellerController::class)
         ->only(['index', 'show']);
