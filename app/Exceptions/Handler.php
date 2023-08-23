@@ -2,13 +2,25 @@
 
 namespace App\Exceptions;
 
+use App\Traits\ApiResponser;
+
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Handler extends ExceptionHandler
 {
+    use ApiResponser;
     /**
      * A list of the exception types that are not reported.
      *
@@ -41,7 +53,7 @@ class Handler extends ExceptionHandler
         });
     }
 
-        /**
+    /**
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -50,12 +62,111 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        if ($exception instanceof ModelNotFoundException) {
-            return response()->json([
-                'message' => 'Record not found',
-            ], 404);
+        if (Request::is('api/*')) {
+            
+            if ($exception instanceof ModelNotFoundException) {
+                $modelName = strtolower(class_basename($exception->getModel()));
+                $error = 'Does not exists any '.$modelName.' with the specific identificator.';
+                return $this->errorResponse(
+                            $error, 
+                            Response::HTTP_NOT_FOUND
+                        );
+            }
+
+            if ($exception instanceof ValidationException) {
+                return $this->convertValidationExceptionToResponse($exception, $request);
+            }
+
+            if ($exception instanceof AuthenticationException) {
+                $error = 'Unauthenticated.';
+                return $this->errorResponse(
+                            $error, 
+                            Response::HTTP_UNAUTHORIZED
+                        );
+            }
+
+            if ($exception instanceof AuthorizationException) {
+                $error = 'Unauthorized.';
+                return $this->errorResponse(
+                            $error, 
+                            Response::HTTP_FORBIDDEN
+                        );
+            }
+
+
+            if ($exception instanceof NotFoundHttpException) {
+                $error = 'The specified URL cannot be found.';
+                return $this->errorResponse(
+                            $error, 
+                            Response::HTTP_NOT_FOUND
+                        );
+            }
+
+
+            if ($exception instanceof MethodNotAllowedHttpException) {
+                $error = 'The specified method for the request is invalid.';
+                return $this->errorResponse(
+                            $error, 
+                            Response::HTTP_METHOD_NOT_ALLOWED
+                        );
+            }
+
+            if ($exception instanceof MethodNotAllowedHttpException) {
+                $error = 'The specified method for the request is invalid.';
+                return $this->errorResponse(
+                            $error, 
+                            Response::HTTP_METHOD_NOT_ALLOWED
+                        );
+            }
+
+            if ($exception instanceof HttpException) {
+                $error = 'The specified method for the request is invalid.';
+                return $this->errorResponse(
+                            $exception->getMessage(), 
+                            $exception->getStatusCode()
+                        );
+            }
+
+            if ($exception instanceof QueryException) {
+                $errorCode = $exception->errorInfo[0] ?? null;
+                if ($errorCode == 23503) {
+                    $error = 'Cannot remove this resource permanently. It is related with any other resource.';
+                    return $this->errorResponse(
+                                $error, 
+                                Response::HTTP_CONFLICT
+                            );
+                }
+            }
+
+            if(!config('app.debug')){
+                $error = 'Unexpected Exception. Try later.';
+                return $this->errorResponse(
+                            $error, 
+                            Response::HTTP_INTERNAL_SERVER_ERROR
+                        ); 
+            }
+
         }
+
         return parent::render($request, $exception);
+    }
+
+
+
+    /**
+     * Create a response object from the given validation exception.
+     *
+     * @param  \Illuminate\Validation\ValidationException  $e
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function convertValidationExceptionToResponse(ValidationException $e, $request)
+    {
+        $errors = $e->validator->errors()->getMessages();
+        return $this->errorResponse(
+                    $errors, 
+                    Response::HTTP_UNPROCESSABLE_ENTITY
+                );
     }
 
 }

@@ -87,15 +87,7 @@ class UserController extends ApiController
             'email'         => 'required|email|unique:users',
             'password'      => 'required|min:6|confirmed',
         ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) {
-            $code = Response::HTTP_UNPROCESSABLE_ENTITY;
-            $messages = $validator->errors()->messages();
-            return $this->errorResponse($messages, $code);
-        }
-
+        $this->validate($request, $rules);
 
         $data                         = $request->all();
         $data['password']             = Crypt::encryptString($request->password);
@@ -144,6 +136,7 @@ class UserController extends ApiController
             $messages = $validator->errors()->messages();
             return $this->errorResponse($messages, $code);
         }
+        
         $inputs = $validator->validated();
 
         $user = User::findOrFail($id);
