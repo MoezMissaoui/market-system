@@ -103,13 +103,12 @@ class UserController extends ApiController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  User $user
      * @return \Illuminate\Http\Response
      */
 
-    public function show($id)
+    public function show(User $user)
     {
-        $user = User::findOrFail($id);
         return $this->showOne($user);
     }
 
@@ -117,16 +116,16 @@ class UserController extends ApiController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  User $user
      * @return \Illuminate\Http\Response
      */
 
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
         $rules = [
             'first_name'    => 'string',
             'last_name'     => 'string',
-            'email'         => 'email|unique:users,email,'.$id,
+            'email'         => 'email|unique:users,email,'.$user->id,
             'password'      => 'min:6|confirmed',
             'is_admin'      => 'boolean|in:0,1'
         ]; 
@@ -139,7 +138,6 @@ class UserController extends ApiController
         
         $inputs = $validator->validated();
 
-        $user = User::findOrFail($id);
         if ($request->has('password')) {
             $inputs['password'] = $request->password;
         }
@@ -159,12 +157,11 @@ class UserController extends ApiController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  User $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        $user = User::findOrFail($id);
         $user->delete();
         return $this->showOne($user); 
     }
