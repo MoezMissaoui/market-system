@@ -4,6 +4,10 @@ use App\Http\Controllers\API\V1\Buyer\BuyerCategoryController;
 use App\Http\Controllers\API\V1\Buyer\BuyerProductController;
 use App\Http\Controllers\API\V1\Buyer\BuyerSellerController;
 use App\Http\Controllers\API\V1\Buyer\BuyerTransactionController;
+use App\Http\Controllers\API\V1\Category\CategoryBuyerController;
+use App\Http\Controllers\API\V1\Category\CategoryProductController;
+use App\Http\Controllers\API\V1\Category\CategorySellerController;
+use App\Http\Controllers\API\V1\Category\CategoryTransactionController;
 use App\Http\Controllers\API\V1\Transaction\TransactionCategoryController;
 use App\Http\Controllers\API\V1\Transaction\TransactionSellerController;
 use App\Http\Controllers\API\V1\Category\CategoryController;
@@ -29,6 +33,10 @@ use Illuminate\Http\Request;
 Route::apiResource('users', UserController::class);
 
 Route::apiResource('categories', CategoryController::class);
+Route::get('categories/{category}/transactions', CategoryTransactionController::class);
+Route::get('categories/{category}/sellers', CategorySellerController::class);
+Route::get('categories/{category}/products', CategoryProductController::class);
+Route::get('categories/{category}/buyers', CategoryBuyerController::class);
 
 Route::apiResource('buyers', BuyerController::class)
         ->only(['index', 'show']);

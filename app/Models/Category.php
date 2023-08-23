@@ -23,6 +23,10 @@ class Category extends Model
         'updated_by'
     ];
 
+    protected $hidden = [
+        'pivot'
+    ];
+
 
     public function products(): BelongsToMany
     {

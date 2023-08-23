@@ -27,6 +27,9 @@ class Product extends Model
         'created_by',
         'updated_by'
     ];
+    protected $hidden = [
+        'pivot'
+    ];
 
 
 
