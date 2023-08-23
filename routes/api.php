@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\V1\Category\CategoryController;
+use App\Http\Controllers\API\V1\Product\ProductController;
 use App\Http\Controllers\API\V1\Seller\SellerController;
 use App\Http\Controllers\API\V1\Buyer\BuyerController;
 use App\Http\Controllers\API\V1\User\UserController;
@@ -26,4 +27,7 @@ Route::apiResource('buyers', BuyerController::class)
         ->only(['index', 'show']);
 
 Route::apiResource('sellers', SellerController::class)
+        ->only(['index', 'show']);
+
+Route::apiResource('products', ProductController::class)
         ->only(['index', 'show']);
