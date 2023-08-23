@@ -12,7 +12,7 @@ class TransactionSellerController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Transaction $transaction)
+    public function __invoke(Transaction $transaction)
     {
         $seller = $transaction->product->seller;
         return $this->showOne($seller);

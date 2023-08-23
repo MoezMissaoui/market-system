@@ -12,7 +12,7 @@ class TransactionCategoryController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Transaction $transaction)
+    public function __invoke(Transaction $transaction)
     {
         $categories = $transaction->product->categories;
         return $this->showAll($categories);

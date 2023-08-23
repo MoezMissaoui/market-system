@@ -35,9 +35,5 @@ Route::apiResource('sellers', SellerController::class)
 Route::apiResource('products', ProductController::class)
         ->only(['index', 'show']);
 
-
-Route::apiResource('transactions.categories', TransactionCategoryController::class)
-        ->only(['index']);
-
-Route::apiResource('transactions.sellers', TransactionSellerController::class)
-        ->only(['index']);
+Route::get('transactions/{transaction}categories', TransactionCategoryController::class);
+Route::get('transactions/{transaction}/sellers', TransactionSellerController::class);
