@@ -1,12 +1,15 @@
 <?php
 
+use App\Http\Controllers\API\V1\Transaction\TransactionCategoryController;
+use App\Http\Controllers\API\V1\Transaction\TransactionSellerController;
 use App\Http\Controllers\API\V1\Category\CategoryController;
 use App\Http\Controllers\API\V1\Product\ProductController;
 use App\Http\Controllers\API\V1\Seller\SellerController;
 use App\Http\Controllers\API\V1\Buyer\BuyerController;
 use App\Http\Controllers\API\V1\User\UserController;
-use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,3 +34,10 @@ Route::apiResource('sellers', SellerController::class)
 
 Route::apiResource('products', ProductController::class)
         ->only(['index', 'show']);
+
+
+Route::apiResource('transactions.categories', TransactionCategoryController::class)
+        ->only(['index']);
+
+Route::apiResource('transactions.sellers', TransactionSellerController::class)
+        ->only(['index']);
