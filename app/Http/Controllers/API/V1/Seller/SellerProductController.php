@@ -7,10 +7,12 @@ use App\Models\Product;
 use App\Models\Seller;
 use App\Models\User;
 
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class SellerProductController extends ApiController
 {
@@ -41,14 +43,15 @@ class SellerProductController extends ApiController
             'name'            => 'required',
             'description'     => 'required',
             'quantity'        => 'required|integer|min:1',
-            'image'           => 'image',
+            'image'           => 'required|image',
         ];
         $this->validate($request, $rules);
 
-        $data                    = $request->all();
+        $data = $request->all();
+        $imageName =  Str::orderedUuid() . '.' . $request->image->getClientOriginalExtension();
+        $data['image'] = $request->file('image')->storeAs('/public/products/images', $imageName);
         $data['created_by']      = Auth::id();
         $data['is_available']    = False;
-        $data['image']           = asset('assets/img/products'. mt_rand(1, 4) . '.png');
         $data['seller_id']       = $seller?->id;
 
         $product = Product::create($data);
@@ -95,6 +98,17 @@ class SellerProductController extends ApiController
             }
         }
 
+        if ($request->hasFile('image')) {
+            // Delete Old Image
+            if(Storage::exists($product->image)){
+                Storage::delete($product->image);
+            }
+
+            // set New Image
+            $imageName =  Str::orderedUuid() . '.' . $request->image->getClientOriginalExtension();
+            $product->image = $request->file('image')->storeAs('/public/products/images', $imageName);
+        }
+
         if ($product->isClean()) {
             return $this->errorResponse(
                 'You need to specify a different value to update.',
@@ -117,8 +131,11 @@ class SellerProductController extends ApiController
     public function destroy(User $seller, Product $product)
     {
         $this->checkSeller($seller, $product);
-        $seller->delete();
-        return $this->showOne($seller); 
+        $product->delete();
+        if(Storage::exists($product->image)){
+            Storage::delete($product->image);
+        }
+        return $this->showOne($product); 
     }
 
 

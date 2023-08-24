@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
@@ -58,10 +59,15 @@ class Product extends Model
         return $this->belongsTo(User::class, 'updated_by', 'id');
     }
 
-
-
     public function isAvailable()
     {
         return $this->is_available;
     }
+
+    // protected function Image(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn ($value) => (str_contains($value, 'public/')) ? 'storage/' . explode('public/', $value)[1] : $value
+    //     );
+    // }
 }
