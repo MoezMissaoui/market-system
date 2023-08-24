@@ -33,6 +33,7 @@ class User extends Authenticatable
 
         'email',
         'email_verified_at',
+        'verification_token',
         'password',
 
         'created_by',

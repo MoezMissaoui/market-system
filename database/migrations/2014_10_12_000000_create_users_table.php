@@ -23,9 +23,9 @@ return new class extends Migration
             $table->string('mobile')->nullable();
             $table->text('adress')->nullable();
 
-
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->text('verification_token')->nullable();
             $table->text('password');
             $table->rememberToken();
 

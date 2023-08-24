@@ -25,5 +25,9 @@ trait ApiResponser
     protected function showOne(Model $model, $code = Response::HTTP_OK) {
         return $this->successResponse(['data' => $model], $code);
     }
+
+    protected function showMessage($message, $code = Response::HTTP_OK) {
+        return $this->successResponse(['data' => $message], $code);
+    }
     
 }

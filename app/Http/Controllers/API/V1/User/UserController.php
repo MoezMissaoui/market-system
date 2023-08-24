@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\API\V1\User;
 
 use App\Http\Controllers\API\ApiController;
+use App\Mail\UserCreated;
 use App\Models\User;
 
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class UserController extends ApiController
 {
@@ -63,7 +67,6 @@ class UserController extends ApiController
      *      )
      * )
     */
-
     public function index()
     {
         $users = User::all();
@@ -90,7 +93,9 @@ class UserController extends ApiController
 
         $data                         = $request->all();
         $data['password']             = $request->password;
-        $data['email_verified_at']    = now();
+        do {
+            $data['verification_token'] = Str::random(64);
+        } while (User::where("verification_token", "=", $data['verification_token'])->first() instanceof User);
         $data['created_by']           = Auth::id();
         $data['is_admin']             = False;
 
@@ -148,6 +153,13 @@ class UserController extends ApiController
             }
             $inputs['is_admin'] = (bool)$request->is_admin;
         }
+        if ($request->has('email')) {
+            $inputs['email_verified_at'] = null;
+            do {
+                $inputs['verification_token'] = Str::random(64);
+            } while (User::where("verification_token", "=", $inputs['verification_token'])->first() instanceof User);
+        }
+
         $user->update($inputs);
 
         return $this->showOne($user); 
@@ -163,5 +175,42 @@ class UserController extends ApiController
     {
         $user->delete();
         return $this->showOne($user); 
+    }
+
+
+    public function verify($token)
+    {
+        $user = User::where('verification_token', $token)->firstOrFail();
+        $user->email_verified_at = Carbon::now();
+        $user->verification_token = null;
+        $user->save();
+
+        return $this->showMessage('The account has been verified successfully.');
+    }
+
+    public function resend(User $user)
+    {
+        if ($user->isVerified()) {
+            return $this->errorResponse(
+                'This user is already verified',
+                Response::HTTP_CONFLICT
+            );
+        }
+        $user->email_verified_at = null;
+        do {
+            $user->verification_token = Str::random(64);
+        } while (User::where("verification_token", "=", $user->verification_token)->first() instanceof User);
+        $user->save();
+
+        retry(
+            5,
+            function () use ($user) {
+                Mail::to($user)->send(new UserCreated($user));
+            },
+            100
+        );
+
+        
+        return $this->showMessage('The verification email has been resend.');
     }
 }

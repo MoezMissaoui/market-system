@@ -41,14 +41,26 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::apiResource('users', UserController::class);
 
+/**
+ * Users
+ */
+Route::apiResource('users', UserController::class);
+Route::name('verify')->get('users/verify/{token}', [UserController::class, 'verify']);
+Route::name('resend')->get('users/{user}/resend', [UserController::class, 'resend']);
+
+/**
+ * Categories
+ */
 Route::apiResource('categories', CategoryController::class);
 Route::get('categories/{category}/transactions', CategoryTransactionController::class);
 Route::get('categories/{category}/sellers', CategorySellerController::class);
 Route::get('categories/{category}/products', CategoryProductController::class);
 Route::get('categories/{category}/buyers', CategoryBuyerController::class);
 
+/**
+ * Buyers
+ */
 Route::apiResource('buyers', BuyerController::class)
         ->only(['index', 'show']);
 Route::get('buyers/{buyer}/transactions', BuyerTransactionController::class);
@@ -56,6 +68,9 @@ Route::get('buyers/{buyer}/sellers', BuyerSellerController::class);
 Route::get('buyers/{buyer}/products', BuyerProductController::class);
 Route::get('buyers/{buyer}/categories', BuyerCategoryController::class);
 
+/**
+ * Sellers
+ */
 Route::apiResource('sellers', SellerController::class)
         ->only(['index', 'show']);
 Route::get('sellers/{seller}/transactions', SellerTransactionController::class);
@@ -64,6 +79,9 @@ Route::get('sellers/{seller}/buyers', SellerBuyerController::class);
 Route::apiResource('sellers.products', SellerProductController::class)
         ->only(['index', 'store', 'update', 'destroy']);
 
+/**
+ * Products
+ */
 Route::apiResource('products', ProductController::class)
         ->only(['index', 'show']);
 Route::get('products/{product}/transactions', ProductTransactionController::class);
@@ -72,5 +90,8 @@ Route::apiResource('products.categories', ProductCategoryController::class)
         ->only(['index', 'update', 'destroy']);
 Route::post('products/{product}/buyers/{buyer}/transactions', ProductBuyerTransactionController::class);
 
+/**
+ * Transactions
+ */
 Route::get('transactions/{transaction}categories', TransactionCategoryController::class);
 Route::get('transactions/{transaction}/sellers', TransactionSellerController::class);
