@@ -14,14 +14,15 @@ class SellerCategoryController extends ApiController
      */
     public function __invoke(Seller $seller)
     {
-        // $categories = $buyer
-        //             ->transactions()
-        //             ->with('product.categories') // Eager Loading
-        //             ->get()
-        //             ->pluck('product.categories')
-        //             ->collapse()
-        //             ->unique('id')
-        //             ->values();
-        // return $this->showAll($categories);
+        $categories = $seller
+                    ->products()
+                    ->whereHas('categories')
+                    ->with('categories') // Eager Loading
+                    ->get()
+                    ->pluck('categories')
+                    ->collapse()
+                    ->unique('id')
+                    ->values();
+        return $this->showAll($categories);
     }
 }

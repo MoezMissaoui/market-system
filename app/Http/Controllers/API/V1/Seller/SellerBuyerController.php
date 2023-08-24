@@ -14,14 +14,16 @@ class SellerBuyerController extends ApiController
      */
     public function __invoke(Seller $seller)
     {
-        // $categories = $buyer
-        //             ->transactions()
-        //             ->with('product.categories') // Eager Loading
-        //             ->get()
-        //             ->pluck('product.categories')
-        //             ->collapse()
-        //             ->unique('id')
-        //             ->values();
-        // return $this->showAll($categories);
+        $buyers = $seller
+                    ->products()
+                    ->whereHas('transactions')
+                    ->with('transactions.buyer') // Eager Loading
+                    ->get()
+                    ->pluck('transactions')
+                    ->collapse()
+                    ->pluck('buyer')
+                    ->unique('id')
+                    ->values();
+        return $this->showAll($buyers);
     }
 }

@@ -55,8 +55,8 @@ Route::apiResource('sellers', SellerController::class)
 Route::get('sellers/{seller}/transactions', SellerTransactionController::class);
 Route::get('sellers/{seller}/categories', SellerCategoryController::class);
 Route::get('sellers/{seller}/buyers', SellerBuyerController::class);
-Route::apiResource('sellers.buyers', SellerProductController::class)
-        ->only(['index', 'store', 'update']);
+Route::apiResource('sellers.products', SellerProductController::class)
+        ->only(['index', 'store', 'update', 'destroy']);
 
 
 Route::apiResource('products', ProductController::class)

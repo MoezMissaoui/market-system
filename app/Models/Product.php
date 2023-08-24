@@ -57,4 +57,11 @@ class Product extends Model
     {
         return $this->belongsTo(User::class, 'updated_by', 'id');
     }
+
+
+
+    public function isAvailable()
+    {
+        return $this->is_available;
+    }
 }
