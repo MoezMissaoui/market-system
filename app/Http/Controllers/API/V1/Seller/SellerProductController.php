@@ -7,11 +7,10 @@ use App\Models\Product;
 use App\Models\Seller;
 use App\Models\User;
 
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 
 class SellerProductController extends ApiController
 {

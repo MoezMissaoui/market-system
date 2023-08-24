@@ -68,7 +68,7 @@ class User extends Authenticatable
         return $this->belongsTo(User::class, 'updated_by', 'id');
     }
 
-    public function has_verified_email()
+    public function isVerified()
     {
         return $this->email_verified_at != NULL;
     }

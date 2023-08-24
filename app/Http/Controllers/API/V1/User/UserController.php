@@ -141,7 +141,7 @@ class UserController extends ApiController
             $inputs['password'] = $request->password;
         }
         if ($request->has('is_admin')) {
-            if (!$user->has_verified_email()) {
+            if (!$user->isVerified()) {
                 $code = Response::HTTP_UNPROCESSABLE_ENTITY;
                 $messages = "Only verified users can modify the admin field";
                 return $this->errorResponse($messages, $code);

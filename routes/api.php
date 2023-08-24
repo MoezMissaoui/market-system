@@ -1,27 +1,35 @@
 <?php
 
+use App\Http\Controllers\API\V1\Buyer\BuyerTransactionController;
 use App\Http\Controllers\API\V1\Buyer\BuyerCategoryController;
 use App\Http\Controllers\API\V1\Buyer\BuyerProductController;
 use App\Http\Controllers\API\V1\Buyer\BuyerSellerController;
-use App\Http\Controllers\API\V1\Buyer\BuyerTransactionController;
-use App\Http\Controllers\API\V1\Category\CategoryBuyerController;
+use App\Http\Controllers\API\V1\Buyer\BuyerController;
+
+use App\Http\Controllers\API\V1\Category\CategoryTransactionController;
 use App\Http\Controllers\API\V1\Category\CategoryProductController;
 use App\Http\Controllers\API\V1\Category\CategorySellerController;
-use App\Http\Controllers\API\V1\Category\CategoryTransactionController;
-use App\Http\Controllers\API\V1\Seller\SellerBuyerController;
+use App\Http\Controllers\API\V1\Category\CategoryBuyerController;
+use App\Http\Controllers\API\V1\Category\CategoryController;
+
+use App\Http\Controllers\API\V1\Product\ProductBuyerTransactionController;
+use App\Http\Controllers\API\V1\Product\ProductTransactionController;
+use App\Http\Controllers\API\V1\Product\ProductCategoryController;
+use App\Http\Controllers\API\V1\Product\ProductBuyerController;
+use App\Http\Controllers\API\V1\Product\ProductController;
+
+use App\Http\Controllers\API\V1\Seller\SellerTransactionController;
 use App\Http\Controllers\API\V1\Seller\SellerCategoryController;
 use App\Http\Controllers\API\V1\Seller\SellerProductController;
-use App\Http\Controllers\API\V1\Seller\SellerTransactionController;
+use App\Http\Controllers\API\V1\Seller\SellerBuyerController;
+use App\Http\Controllers\API\V1\Seller\SellerController;
+
 use App\Http\Controllers\API\V1\Transaction\TransactionCategoryController;
 use App\Http\Controllers\API\V1\Transaction\TransactionSellerController;
-use App\Http\Controllers\API\V1\Category\CategoryController;
-use App\Http\Controllers\API\V1\Product\ProductController;
-use App\Http\Controllers\API\V1\Seller\SellerController;
-use App\Http\Controllers\API\V1\Buyer\BuyerController;
+
 use App\Http\Controllers\API\V1\User\UserController;
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +41,6 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
 Route::apiResource('users', UserController::class);
 
 Route::apiResource('categories', CategoryController::class);
@@ -49,7 +56,6 @@ Route::get('buyers/{buyer}/sellers', BuyerSellerController::class);
 Route::get('buyers/{buyer}/products', BuyerProductController::class);
 Route::get('buyers/{buyer}/categories', BuyerCategoryController::class);
 
-
 Route::apiResource('sellers', SellerController::class)
         ->only(['index', 'show']);
 Route::get('sellers/{seller}/transactions', SellerTransactionController::class);
@@ -58,9 +64,13 @@ Route::get('sellers/{seller}/buyers', SellerBuyerController::class);
 Route::apiResource('sellers.products', SellerProductController::class)
         ->only(['index', 'store', 'update', 'destroy']);
 
-
 Route::apiResource('products', ProductController::class)
         ->only(['index', 'show']);
+Route::get('products/{product}/transactions', ProductTransactionController::class);
+Route::get('products/{product}/buyers', ProductBuyerController::class);
+Route::apiResource('products.categories', ProductCategoryController::class)
+        ->only(['index', 'update', 'destroy']);
+Route::post('products/{product}/buyers/{buyer}/transactions', ProductBuyerTransactionController::class);
 
 Route::get('transactions/{transaction}categories', TransactionCategoryController::class);
 Route::get('transactions/{transaction}/sellers', TransactionSellerController::class);
