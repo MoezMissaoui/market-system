@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1\Product;
 
 use App\Http\Controllers\API\ApiController;
+use App\Transformers\ProductTransformer;
 use App\Models\Transaction;
 use App\Models\Product;
 use App\Models\User;
@@ -13,6 +14,14 @@ use Illuminate\Http\Request;
 
 class ProductBuyerTransactionController extends ApiController
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware('transform.input:'. ProductTransformer::class)
+                ->only(['__invoke']);
+    }
+
     /**
      * Display a listing of the resource.
      *

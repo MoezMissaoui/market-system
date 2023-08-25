@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1\Category;
 
 use App\Http\Controllers\API\ApiController;
+use App\Transformers\CategoryTransformer;
 use App\Models\Category;
 
 use Illuminate\Support\Facades\Validator;
@@ -12,6 +13,13 @@ use Illuminate\Http\Request;
 
 class CategoryController extends ApiController
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware('transform.input:'. CategoryTransformer::class)
+                ->only(['store', 'update']);
+    }
 
     /**
      * Display a listing of the resource.
@@ -36,18 +44,18 @@ class CategoryController extends ApiController
 
     public function store(Request $request)
     {
-    $rules = [
-    'name'         => 'required|unique:categories',
-    'description'  => 'required',
-    ];
-    $this->validate($request, $rules);
+        $rules = [
+            'name'         => 'required|unique:categories',
+            'description'  => 'required',
+        ];
+        $this->validate($request, $rules);
 
-    $data                         = $request->all();
-    $data['created_by']           = Auth::id();
+        $data                         = $request->all();
+        $data['created_by']           = Auth::id();
 
-    $category = Category::create($data);
+        $category = Category::create($data);
 
-    return $this->showOne($category, Response::HTTP_CREATED);
+        return $this->showOne($category, Response::HTTP_CREATED);
     }
 
 
@@ -73,21 +81,21 @@ class CategoryController extends ApiController
 
     public function update(Request $request, Category $category)
     {
-    $rules = [
-    'name'         => 'unique:categories,name,'.$category->id,
-    'description'  => 'text',
-    ]; 
-    $validator = Validator::make($request->all(), $rules);
-    if ($validator->fails()) {
-        $code = Response::HTTP_UNPROCESSABLE_ENTITY;
-        $messages = $validator->errors()->messages();
-        return $this->errorResponse($messages, $code);
-    }
-    $inputs = $validator->validated();
+        $rules = [
+            'name'         => 'unique:categories,name,'.$category->id,
+            'description'  => 'text',
+        ]; 
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            $code = Response::HTTP_UNPROCESSABLE_ENTITY;
+            $messages = $validator->errors()->messages();
+            return $this->errorResponse($messages, $code);
+        }
+        $inputs = $validator->validated();
 
-    $category->update($inputs);
+        $category->update($inputs);
 
-    return $this->showOne($category); 
+        return $this->showOne($category); 
     }
 
     /**

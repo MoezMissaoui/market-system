@@ -25,6 +25,7 @@ use App\Http\Controllers\API\V1\Seller\SellerBuyerController;
 use App\Http\Controllers\API\V1\Seller\SellerController;
 
 use App\Http\Controllers\API\V1\Transaction\TransactionCategoryController;
+use App\Http\Controllers\API\V1\Transaction\TransactionController;
 use App\Http\Controllers\API\V1\Transaction\TransactionSellerController;
 
 use App\Http\Controllers\API\V1\User\UserController;
@@ -122,6 +123,9 @@ Route::post('products/{product}/buyers/{buyer}/transactions', ProductBuyerTransa
 /**
  * Transactions
  */
+Route::apiResource('transactions', TransactionController::class)
+        ->only(['index', 'show']);
+
 Route::name('transactions.categories.index')
 ->get('transactions/{transaction}categories', TransactionCategoryController::class);
 
