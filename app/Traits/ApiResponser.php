@@ -22,10 +22,13 @@ trait ApiResponser
 
     protected function showAll(Collection $collection, $code = Response::HTTP_OK) 
     {
-        if (!$collection->isEmpty()) {
-            $transformer = $collection->first()->transformer;
-            $collection = $this->transformData($collection, $transformer);
+        if ($collection->isEmpty()) {
+            return $this->successResponse($collection, $code);
         }
+
+        $transformer = $collection->first()->transformer;
+        $collection = $this->sortData($collection);
+        $collection = $this->transformData($collection, $transformer);
         return $this->successResponse($collection, $code);
     }
 
@@ -39,6 +42,15 @@ trait ApiResponser
     protected function showMessage($message, $code = Response::HTTP_OK) 
     {
         return $this->successResponse(['data' => $message], $code);
+    }
+
+    protected function sortData(Collection $collection) 
+    {
+        if (request()->has('sort_by')) {
+            $attribute = request()->sort_by;
+            $collection = $collection->sortBy->{$attribute};
+        }
+        return $collection;
     }
 
 
