@@ -33,7 +33,7 @@ class BuyerTransformer extends TransformerAbstract
     public function transform(Buyer $buyer)
     {
         return [
-            'id'               => $buyer->id,
+            'identifier'       => $buyer->id,
             
             'name'             => $buyer->first_name . ' ' . $buyer->last_name,
             'age'              => $buyer->age,
@@ -50,5 +50,30 @@ class BuyerTransformer extends TransformerAbstract
             'createdBy'        => $buyer->created_by,
             'updatedBy'        => $buyer->updated_by
         ]; 
+    }
+
+    public static function originalAttribute($index)
+    {
+        $attributes = [
+            'identifier'       => 'id',
+            
+            'name'             => 'first_name',
+            'age'              => 'age',
+            'phone'            => 'mobile',
+            'adress'           => 'adress',
+
+            'email'            => 'email',
+            'emailVerifiedAt'  => 'email_verified_at',
+
+            'createdAt'        => 'created_at',
+            'updatedAt'        => 'updated_at',
+            'deletedAt'        => 'deleted_at',
+
+            'createdBy'        => 'created_by',
+            'updatedBy'        => 'updated_by'
+        ];
+        return isset($attributes[$index])
+                ? $attributes[$index]
+                : null;
     }
 }

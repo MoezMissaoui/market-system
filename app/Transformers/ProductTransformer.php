@@ -33,7 +33,7 @@ class ProductTransformer extends TransformerAbstract
     public function transform(Product $product)
     {
         return [
-            'id'               => $product->id,
+            'identifier'       => $product->id,
             
             'title'            => $product->name,
             'details'          => $product->description,
@@ -52,5 +52,30 @@ class ProductTransformer extends TransformerAbstract
             'createdBy'        => $product->created_by,
             'updatedBy'        => $product->updated_by
         ]; 
+    }
+
+    public static function originalAttribute($index)
+    {
+        $attributes = [
+            'identifier'       => 'id',
+            
+            'title'            => 'name',
+            'details'          => 'description',
+
+            'stock'            => 'quantity',
+            'isAvailable'      => 'is_available',
+            'picture'          => 'image',
+            'seller'           => 'seller_id',
+
+            'createdAt'        => 'created_at',
+            'updatedAt'        => 'updated_at',
+            'deletedAt'        => 'deleted_at',
+
+            'createdBy'        => 'created_by',
+            'updatedBy'        => 'updated_by'
+        ];
+        return isset($attributes[$index])
+                ? $attributes[$index]
+                : null;
     }
 }

@@ -33,7 +33,7 @@ class CategoryTransformer extends TransformerAbstract
     public function transform(Category $category)
     {
         return [
-            'id'               => $category->id,
+            'identifier'       => $category->id,
             
             'title'            => $category->name,
             'details'          => $category->description,
@@ -45,5 +45,25 @@ class CategoryTransformer extends TransformerAbstract
             'createdBy'        => $category->created_by,
             'updatedBy'        => $category->updated_by
         ]; 
+    }
+
+    public static function originalAttribute($index)
+    {
+        $attributes = [
+            'identifier'       => 'id',
+            
+            'title'            => 'name',
+            'details'          => 'description',
+
+            'createdAt'        => 'created_at',
+            'updatedAt'        => 'updated_at',
+            'deletedAt'        => 'deleted_at',
+
+            'createdBy'        => 'created_by',
+            'updatedBy'        => 'updated_by'
+        ];
+        return isset($attributes[$index])
+                ? $attributes[$index]
+                : null;
     }
 }

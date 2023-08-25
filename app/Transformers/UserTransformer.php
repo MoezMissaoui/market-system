@@ -33,7 +33,7 @@ class UserTransformer extends TransformerAbstract
     public function transform(User $user)
     {
         return [
-            'id'               => $user->id,
+            'identifier'       => $user->id,
             
             'name'             => $user->first_name . ' ' . $user->last_name,
             'age'              => $user->age,
@@ -52,5 +52,32 @@ class UserTransformer extends TransformerAbstract
             'createdBy'        => $user->created_by,
             'updatedBy'        => $user->updated_by
         ]; 
+    }
+
+    public static function originalAttribute($index)
+    {
+        $attributes = [
+            'identifier'       => 'id',
+            
+            'name'             => 'first_name',
+            'age'              => 'age',
+            'phone'            => 'mobile',
+            'adress'           => 'adress',
+
+            'isAdmin'          => 'is_admin',
+
+            'email'            => 'email',
+            'emailVerifiedAt'  => 'email_verified_at',
+
+            'createdAt'        => 'created_at',
+            'updatedAt'        => 'updated_at',
+            'deletedAt'        => 'deleted_at',
+
+            'createdBy'        => 'created_by',
+            'updatedBy'        => 'updated_by'
+        ];
+        return isset($attributes[$index])
+                ? $attributes[$index]
+                : null;
     }
 }

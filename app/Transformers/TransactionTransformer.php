@@ -33,7 +33,7 @@ class TransactionTransformer extends TransformerAbstract
     public function transform(Transaction $transaction)
     {
         return [
-            'id'               => $transaction->id,
+            'identifier'       => $transaction->id,
             
             'quantity'         => $transaction->quantity,
             'buyer'            => $transaction->buyer_id,
@@ -46,5 +46,26 @@ class TransactionTransformer extends TransformerAbstract
             'createdBy'        => $transaction->created_by,
             'updatedBy'        => $transaction->updated_by
         ]; 
+    }
+
+    public static function originalAttribute($index)
+    {
+        $attributes = [
+            'identifier'       => 'id',
+            
+            'quantity'         => 'quantity',
+            'buyer'            => 'buyer_id',
+            'product'          => 'product_id',
+
+            'createdAt'        => 'created_at',
+            'updatedAt'        => 'updated_at',
+            'deletedAt'        => 'deleted_at',
+
+            'createdBy'        => 'created_by',
+            'updatedBy'        => 'updated_by'
+        ];
+        return isset($attributes[$index])
+                ? $attributes[$index]
+                : null;
     }
 }
