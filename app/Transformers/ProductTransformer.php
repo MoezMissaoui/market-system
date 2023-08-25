@@ -50,7 +50,35 @@ class ProductTransformer extends TransformerAbstract
             'deletedAt'        => $product->deleted_at,
 
             'createdBy'        => $product->created_by,
-            'updatedBy'        => $product->updated_by
+            'updatedBy'        => $product->updated_by,
+
+            'links'       => [
+                [
+                    'rel'    => 'self',
+                    'href'   => route('products.show', $product->id),
+                    'action' => 'GET'
+                ],
+                [
+                    'rel'    => 'product.buyers',
+                    'href'   => route('products.buyers.index', $product->id),
+                    'action' => 'GET'
+                ],
+                [
+                    'rel'    => 'product.categories',
+                    'href'   => route('products.categories.index', $product->id),
+                    'action' => 'GET'
+                ],
+                [
+                    'rel'    => 'product.transactions',
+                    'href'   => route('products.transactions.index', $product->id),
+                    'action' => 'GET'
+                ],
+                [
+                    'rel'    => 'seller',
+                    'href'   => route('sellers.show', $product->seller_id),
+                    'action' => 'GET'
+                ],
+            ]
         ]; 
     }
 

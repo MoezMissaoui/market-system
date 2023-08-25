@@ -50,7 +50,15 @@ class UserTransformer extends TransformerAbstract
             'deletedAt'        => $user->deleted_at,
 
             'createdBy'        => $user->created_by,
-            'updatedBy'        => $user->updated_by
+            'updatedBy'        => $user->updated_by,
+
+            'links'       => [
+                [
+                    'rel'    => 'self',
+                    'href'   => route('users.show', $user->id),
+                    'action' => 'GET'
+                ],
+            ]
         ]; 
     }
 

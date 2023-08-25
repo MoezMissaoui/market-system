@@ -48,7 +48,40 @@ class BuyerTransformer extends TransformerAbstract
             'deletedAt'        => $buyer->deleted_at,
 
             'createdBy'        => $buyer->created_by,
-            'updatedBy'        => $buyer->updated_by
+            'updatedBy'        => $buyer->updated_by,
+
+            'links'       => [
+                [
+                    'rel'    => 'self',
+                    'href'   => route('buyers.show', $buyer->id),
+                    'action' => 'GET'
+                ],
+                [
+                    'rel'    => 'buyers.categories',
+                    'href'   => route('buyers.categories.index', $buyer->id),
+                    'action' => 'GET'
+                ],
+                [
+                    'rel'    => 'buyers.products',
+                    'href'   => route('buyers.products.index', $buyer->id),
+                    'action' => 'GET'
+                ],
+                [
+                    'rel'    => 'buyers.sellers',
+                    'href'   => route('buyers.sellers.index', $buyer->id),
+                    'action' => 'GET'
+                ],
+                [
+                    'rel'    => 'buyers.transactions',
+                    'href'   => route('buyers.transactions.index', $buyer->id),
+                    'action' => 'GET'
+                ],
+                [
+                    'rel'    => 'users',
+                    'href'   => route('users.show', $buyer->id),
+                    'action' => 'GET'
+                ],
+            ]
         ]; 
     }
 

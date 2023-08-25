@@ -53,29 +53,52 @@ Route::name('resend')->get('users/{user}/resend', [UserController::class, 'resen
  * Categories
  */
 Route::apiResource('categories', CategoryController::class);
-Route::get('categories/{category}/transactions', CategoryTransactionController::class);
-Route::get('categories/{category}/sellers', CategorySellerController::class);
-Route::get('categories/{category}/products', CategoryProductController::class);
-Route::get('categories/{category}/buyers', CategoryBuyerController::class);
+
+Route::name('categories.transactions.index')
+->get('categories/{category}/transactions', CategoryTransactionController::class);
+
+Route::name('categories.sellers.index')
+->get('categories/{category}/sellers', CategorySellerController::class);
+
+Route::name('categories.products.index')
+->get('categories/{category}/products', CategoryProductController::class);
+
+Route::name('categories.buyers.index')
+->get('categories/{category}/buyers', CategoryBuyerController::class);
 
 /**
  * Buyers
  */
 Route::apiResource('buyers', BuyerController::class)
         ->only(['index', 'show']);
-Route::get('buyers/{buyer}/transactions', BuyerTransactionController::class);
-Route::get('buyers/{buyer}/sellers', BuyerSellerController::class);
-Route::get('buyers/{buyer}/products', BuyerProductController::class);
-Route::get('buyers/{buyer}/categories', BuyerCategoryController::class);
+
+Route::name('buyers.transactions.index')
+->get('buyers/{buyer}/transactions', BuyerTransactionController::class);
+
+Route::name('buyers.sellers.index')
+->get('buyers/{buyer}/sellers', BuyerSellerController::class);
+
+Route::name('buyers.products.index')
+->get('buyers/{buyer}/products', BuyerProductController::class);
+
+Route::name('buyers.categories.index')
+->get('buyers/{buyer}/categories', BuyerCategoryController::class);
 
 /**
  * Sellers
  */
 Route::apiResource('sellers', SellerController::class)
         ->only(['index', 'show']);
-Route::get('sellers/{seller}/transactions', SellerTransactionController::class);
-Route::get('sellers/{seller}/categories', SellerCategoryController::class);
-Route::get('sellers/{seller}/buyers', SellerBuyerController::class);
+
+Route::name('sellers.transactions.index')
+->get('sellers/{seller}/transactions', SellerTransactionController::class);
+
+Route::name('sellers.categories.index')
+->get('sellers/{seller}/categories', SellerCategoryController::class);
+
+Route::name('sellers.buyers.index')
+->get('sellers/{seller}/buyers', SellerBuyerController::class);
+
 Route::apiResource('sellers.products', SellerProductController::class)
         ->only(['index', 'store', 'update', 'destroy']);
 
@@ -84,14 +107,23 @@ Route::apiResource('sellers.products', SellerProductController::class)
  */
 Route::apiResource('products', ProductController::class)
         ->only(['index', 'show']);
-Route::get('products/{product}/transactions', ProductTransactionController::class);
-Route::get('products/{product}/buyers', ProductBuyerController::class);
+
+Route::name('products.transactions.index')
+->get('products/{product}/transactions', ProductTransactionController::class);
+
+Route::name('products.buyers.index')
+->get('products/{product}/buyers', ProductBuyerController::class);
+
 Route::apiResource('products.categories', ProductCategoryController::class)
         ->only(['index', 'update', 'destroy']);
+
 Route::post('products/{product}/buyers/{buyer}/transactions', ProductBuyerTransactionController::class);
 
 /**
  * Transactions
  */
-Route::get('transactions/{transaction}categories', TransactionCategoryController::class);
-Route::get('transactions/{transaction}/sellers', TransactionSellerController::class);
+Route::name('transactions.categories.index')
+->get('transactions/{transaction}categories', TransactionCategoryController::class);
+
+Route::name('transactions.sellers.index')
+->get('transactions/{transaction}/sellers', TransactionSellerController::class);

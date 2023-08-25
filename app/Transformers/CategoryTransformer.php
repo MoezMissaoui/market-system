@@ -43,7 +43,45 @@ class CategoryTransformer extends TransformerAbstract
             'deletedAt'        => $category->deleted_at,
 
             'createdBy'        => $category->created_by,
-            'updatedBy'        => $category->updated_by
+            'updatedBy'        => $category->updated_by,
+
+            'links'       => [
+                [
+                    'rel'    => 'self',
+                    'href'   => route('categories.show', $category->id),
+                    'action' => 'GET'
+                ],
+                [
+                    'rel'    => 'self',
+                    'href'   => route('categories.update', $category->id),
+                    'action' => 'PUT'
+                ],
+                [
+                    'rel'    => 'self',
+                    'href'   => route('categories.destroy', $category->id),
+                    'action' => 'DELETE'
+                ],
+                [
+                    'rel'    => 'category.buyers',
+                    'href'   => route('categories.buyers.index', $category->id),
+                    'action' => 'GET'
+                ],
+                [
+                    'rel'    => 'category.sellers',
+                    'href'   => route('categories.sellers.index', $category->id),
+                    'action' => 'GET'
+                ],
+                [
+                    'rel'    => 'category.products',
+                    'href'   => route('categories.products.index', $category->id),
+                    'action' => 'GET'
+                ],
+                [
+                    'rel'    => 'category.transactions',
+                    'href'   => route('categories.transactions.index', $category->id),
+                    'action' => 'GET'
+                ],
+            ]
         ]; 
     }
 
