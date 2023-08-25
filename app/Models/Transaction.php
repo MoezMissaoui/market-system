@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Transformers\TransactionTransformer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,6 +13,7 @@ class Transaction extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public $transformer = TransactionTransformer::class;
     protected $table = 'transactions';
 
     protected $fillable = [

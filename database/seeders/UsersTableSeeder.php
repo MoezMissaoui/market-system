@@ -19,7 +19,7 @@ class UsersTableSeeder extends Seeder
 
         \DB::table('users')->delete();
 
-        User::factory(123)->create(); 
+        User::factory(10)->create(); 
         
     }
 }

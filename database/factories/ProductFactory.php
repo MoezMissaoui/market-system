@@ -22,7 +22,7 @@ class ProductFactory extends Factory
             'description'    => $this->faker->paragraph(),
             'quantity'      => $this->faker->numberBetween(4, 50),
             'is_available'  => true,
-            'image'         => asset('assets/img/products'. $this->faker->numberBetween(1, 4) . '.png'),
+            'image'         => 'assets/img/products'. $this->faker->numberBetween(1, 4) . '.png',
             'seller_id'     => User::all('id')->random()->id ?? NULL,  // Or User::inRandomorder()->first('id')->id
         ];
     }
