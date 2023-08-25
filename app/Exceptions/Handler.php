@@ -120,7 +120,6 @@ class Handler extends ExceptionHandler
             }
 
             if ($exception instanceof HttpException) {
-                $error = 'The specified method for the request is invalid.';
                 return $this->errorResponse(
                             $exception->getMessage(), 
                             $exception->getStatusCode()
