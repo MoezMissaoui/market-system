@@ -7,6 +7,7 @@ use App\Traits\ApiResponser;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\AuthenticationException;
@@ -62,7 +63,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        if (Request::is('api/*')) {
+        if (collect($request->route()->middleware())->contains('api')) {
             
             if ($exception instanceof ModelNotFoundException) {
                 $modelName = strtolower(class_basename($exception->getModel()));
@@ -137,6 +138,7 @@ class Handler extends ExceptionHandler
                 }
             }
 
+
             if(!config('app.debug')){
                 $error = 'Unexpected Exception. Try later.';
                 return $this->errorResponse(
@@ -145,12 +147,14 @@ class Handler extends ExceptionHandler
                         ); 
             }
 
+        }else{
+            if ($exception instanceof TokenMismatchException) {
+                return redirect()->back()->withInput($request->input());
+            }
         }
 
         return parent::render($request, $exception);
     }
-
-
 
     /**
      * Create a response object from the given validation exception.
@@ -162,10 +166,27 @@ class Handler extends ExceptionHandler
     protected function convertValidationExceptionToResponse(ValidationException $e, $request)
     {
         $errors = $e->validator->errors()->getMessages();
+        if ($this->isFrontend($request)) {
+            return $request->ajax() 
+                    ? $this->errorResponse(
+                        $errors, 
+                        Response::HTTP_UNPROCESSABLE_ENTITY
+                    )
+                    : redirect()
+                        ->back()
+                        ->withInput($request->input())
+                        ->withErrors($errors);
+        }
         return $this->errorResponse(
                     $errors, 
                     Response::HTTP_UNPROCESSABLE_ENTITY
                 );
+    }
+
+    private function isFrontend($request)
+    {
+        return  $request->acceptsHtml() && 
+                collect($request->route()->middleware())->contains('web');
     }
 
 }
