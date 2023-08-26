@@ -131,3 +131,6 @@ Route::name('transactions.categories.index')
 
 Route::name('transactions.sellers.index')
 ->get('transactions/{transaction}/sellers', TransactionSellerController::class);
+
+
+Route::post('oauth/token', '\Laravel\Passport\Http\Controllers\AccessTokenController@issueToken');
