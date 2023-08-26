@@ -7,6 +7,13 @@ use App\Models\Category;
 
 class CategoryProductController extends ApiController
 {
+
+    public function __construct()
+    {
+        $this->middleware('client.credentials')
+                ->only(['__invoke']);
+    }
+
     /**
      * Display a listing of the resource.
      *
