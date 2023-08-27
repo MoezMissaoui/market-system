@@ -49,6 +49,7 @@ use Illuminate\Support\Facades\Route;
 Route::apiResource('users', UserController::class);
 Route::name('verify')->get('users/verify/{token}', [UserController::class, 'verify']);
 Route::name('resend')->get('users/{user}/resend', [UserController::class, 'resend']);
+Route::get('auth', [UserController::class, 'auth']);
 
 /**
  * Categories
