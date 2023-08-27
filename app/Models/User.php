@@ -108,7 +108,7 @@ class User extends Authenticatable
     protected function Password(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => Crypt::encryptString($value)
+            set: fn ($value) => bcrypt($value)
         );
     }
     

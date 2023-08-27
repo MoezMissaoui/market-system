@@ -31,7 +31,7 @@ class UserFactory extends Factory
             // 'email_verified_at' => now(),
             'verification_token' => $this->faker->unique()->randomNumber(),
 
-            'password'           => Crypt::encryptString('password'),
+            'password'           => bcrypt('password'),
             'remember_token'     => Str::random(10),
         ];
     }

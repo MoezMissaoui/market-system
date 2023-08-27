@@ -35,7 +35,8 @@ class UserTransformer extends TransformerAbstract
         return [
             'identifier'       => $user->id,
             
-            'name'             => $user->first_name . ' ' . $user->last_name,
+            'firstName'        => $user->first_name,
+            'lastName'         => $user->last_name,
             'age'              => $user->age,
             'phone'            => $user->mobile,
             'adress'           => $user->adress,
@@ -67,7 +68,8 @@ class UserTransformer extends TransformerAbstract
         $attributes = [
             'identifier'       => 'id',
             
-            'name'             => 'first_name',
+            'firstName'        => 'first_name',
+            'lastName'         => 'last_name',
             'age'              => 'age',
             'phone'            => 'mobile',
             'adress'           => 'adress',
@@ -76,6 +78,9 @@ class UserTransformer extends TransformerAbstract
 
             'email'            => 'email',
             'emailVerifiedAt'  => 'email_verified_at',
+
+            'password'                 => 'password',
+            'password_confirmation'    => 'password_confirmation',
 
             'createdAt'        => 'created_at',
             'updatedAt'        => 'updated_at',
@@ -94,7 +99,8 @@ class UserTransformer extends TransformerAbstract
         $attributes = [
             'id'                 => 'identifier',
             
-            'first_name'         => 'name',
+            'first_name'         => 'firstName',
+            'last_name'          => 'lastName',
             'age'                => 'age',
             'mobile'             => 'phone',
             'adress'             => 'adress',
@@ -103,6 +109,9 @@ class UserTransformer extends TransformerAbstract
 
             'email'              => 'email',
             'email_verified_at'  => 'emailVerifiedAt',
+
+            'password'                 => 'password',
+            'password_confirmation'    => 'password_confirmation',
 
             'created_at'         => 'createdAt',
             'updated_at'         => 'updatedAt',
